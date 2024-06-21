@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 import {GameEngineProvider} from "./hooks/useGameEngine.jsx";
+import {insertCoin} from "playroomkit";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-      <GameEngineProvider>
-          <App />
-      </GameEngineProvider>
-  </React.StrictMode>,
-)
+insertCoin().then(() => {
+    ReactDOM.createRoot(document.getElementById('root')).render(
+        <React.StrictMode>
+            <GameEngineProvider>
+                <App/>
+            </GameEngineProvider>
+        </React.StrictMode>,
+    )
+})
+
