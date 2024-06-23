@@ -1,13 +1,12 @@
-import { OrbitControls } from "@react-three/drei";
+import {Environment, OrbitControls} from "@react-three/drei";
+import {Card} from "./Card.jsx";
 
 export const Experience = () => {
-  return (
-    <>
-      <OrbitControls />
-      <mesh>
-        <boxGeometry />
-        <meshNormalMaterial />
-      </mesh>
-    </>
-  );
+    return (
+        <>
+            <OrbitControls/>
+            <Card/>
+            <Environment preset="dawn" background blur={2} />
+        </>
+    );
 };

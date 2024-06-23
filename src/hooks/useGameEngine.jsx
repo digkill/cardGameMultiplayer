@@ -116,6 +116,76 @@ export const GameEngineProvider = ({children}) => {
         return clearTimer
     }, [phase, paused])
 
+    const getCard = () => {
+        const player = players[getState("playerTurn")]
+        if (!player) {
+            return ""
+        }
+        const cards = player.getState("cards")
+        if (!cards) {
+            return ""
+        }
+        const selectedCard = player.getState("selectedCard")
+        return cards[selectedCard]
+    }
+
+    const performPlayerAction = () => {
+        const player = players[getState('playerTurn')]
+        console.log('Perform player action', player.id)
+        const selectedCard = player.getState('selectedCard')
+        const cards = player.getState('cards')
+        const card = cards[selectedCard]
+        let success = true
+        if (card !== 'shield') {
+            player.setState('shield', false, true)
+        }
+        switch (card) {
+            case 'punch':
+                let target = players[player.getState('playerTarget')]
+                if (!target) {
+                    let targetIndex = (getState('playerTurn') + 1) % players.length
+                    player.setState('playerTarget', targetIndex, true)
+                    target = players[targetIndex] // we punch the next player if playerTarget is not set
+                }
+                console.log('Punch target', target.id)
+                if (target.getState('shield')) {
+                    console.log('Target is shielded')
+                    success = false
+                    break
+                }
+                if (target.getState('gems') > 0) {
+                    target.setState('gems', target.getState('gems') - 1, true)
+                    setGems(getState('gems') + 1, true)
+                    console.log('Target has gems')
+                }
+                break
+            case 'grab':
+                if (getState('gems') > 0) {
+                    player.setState('gems', player.getState('gems') + 1, true)
+                    setGems(getState('gems') - 1, true)
+                } else {
+                    console.log('No gems available')
+                    success = false
+                }
+                break
+            case 'shield':
+                console.log('Shield')
+                player.setState('shield', true, true)
+                break
+            default:
+                break
+        }
+        setActionSuccess(success, true)
+    }
+
+    const removePlayerCard = () => {
+        const player = players[getState('playerTurn')]
+        const cards = player.getState('cards')
+        const selectedCard = player.getState('selectedCard')
+        cards.splice(selectedCard, 1)
+        player.setState('cards', cards, true)
+    }
+
     const phaseEnd = () => {
         let newTime = 0
         switch (getState("phase")) {
@@ -169,13 +239,31 @@ export const GameEngineProvider = ({children}) => {
                         newTime = TIME_PHASE_CARDS
                     }
                 } else {
-
+                    // NEXT PLAYER
+                    console.log("Next player")
+                    setPlayerTurn(newPlayerTurn, true)
+                    if (getCard() === "punch") {
+                        setPhase("playerChoice", true)
+                        newTime = TIME_PHASE_PLAYER_CHOICE
+                    } else {
+                        performPlayerAction()
+                        setPhase('playerAction', true)
+                        newTime = TIME_PHASE_PLAYER_ACTION
+                    }
                 }
+                break
+            default:
+                break
         }
+        setTimer(newTime, true)
     }
 
     return (
-        <GameEngineContext.Provider value={{...gameState}}>
+        <GameEngineContext.Provider value={{
+            ...gameState,
+            startGame,
+            getCard,
+        }}>
             {children}
         </GameEngineContext.Provider>)
 }
