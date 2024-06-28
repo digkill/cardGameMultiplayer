@@ -1,14 +1,15 @@
-import { useEffect } from "react"
+import {useEffect, useRef} from "react"
+import {useAnimations, useGLTF} from "@react-three/drei";
 
 const CHARACTERS = ["Anne", "Captain_Barbarossa", "Henry", "Mako"]
 
-export const Character = ({ character = 0, animation = "Idle", ...props}) => {
+export const Character = ({character = 0, animation = "Idle", ...props}) => {
     const {scene, animations} = useGLTF(
         `/models/Characters_${CHARACTERS[character]}.gltf`
     )
     const ref = useRef()
-    const {action} = useAnimations(animations, ref)
-    console.log(action)
+    const {actions} = useAnimations(animations, ref)
+    console.log(actions)
 
     useEffect(() => {
         actions[animation].reset().fadeIn(0.5).play()
@@ -16,6 +17,6 @@ export const Character = ({ character = 0, animation = "Idle", ...props}) => {
     }, [animation])
 
     return <group {...props} ref={ref}>
-        <primitive object={scene} />
+        <primitive object={scene}/>
     </group>
 }

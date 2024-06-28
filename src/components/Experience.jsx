@@ -1,12 +1,12 @@
 import {Environment, OrbitControls} from "@react-three/drei";
-import {Card} from "./Card.jsx";
+import {MobileController} from "./MobileController.jsx";
 
 export const Experience = () => {
     return (
         <>
             <OrbitControls/>
-            <Card/>
-            <Environment preset="dawn" background blur={2} />
+            <MobileController/>
+            <Environment preset="dawn" background blur={2}/>
         </>
     );
 };
