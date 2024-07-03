@@ -1,5 +1,15 @@
 import {NB_ROUNDS, useGameEngine} from "../hooks/useGameEngine.jsx";
 import {isHost, isStreamScreen, myPlayer} from "playroomkit";
+import {useEffect} from "react";
+
+const audios = {
+    background: new Audio("/audios/Drunken Sailor - Cooper Cannell.mp3"),
+    punch: new Audio("/audios/punch.mp3"),
+    shield: new Audio("/audios/shield.mp3"),
+    grab: new Audio("/audios/grab.mp3"),
+    fail: new Audio("/audios/fail.mp3"),
+    cards: new Audio("/audios/cards.mp3"),
+};
 
 export const UI = () => {
 
@@ -57,6 +67,46 @@ export const UI = () => {
             break
     }
 
+    // AUDIO MANAGER
+    const [audioEnabled, setAudioEnabled] = useState(false)
+    const toggleAudio = () => {
+        setAudioEnabled((prev) => !prev);
+    };
+
+    useEffect(() => {
+
+        if (audioEnabled) {
+            audios.background.play()
+            audios.background.loop = true
+        } else {
+            audios.background.pause()
+        }
+        return () => {
+            audios.background.pause()
+        }
+
+
+    }, [audioEnabled]);
+    useEffect(() => {
+        if (!audioEnabled) {
+            return;
+        }
+        let audioToPlay;
+        if (phase === "playerAction") {
+            if (actionSuccess) {
+                audioToPlay = audios[getCard()]
+            } else {
+                audioToPlay = audios.fail
+            }
+        }
+        if (phase === "cards") {
+            audioToPlay = audios.cards
+        }
+        if (audioToPlay) {
+            audioToPlay.currentTime = 0
+            audioToPlay.play()
+        }
+    }, [phase, actionSuccess, audioEnabled]);
     return (
         <div className="text-white drop-shadow-xl fixed top-0 left-0 right-0 bottom-0 z-10 flex flex-col pointer-events-none">
             <div className="p-4 w-full flex items-center justify-between">
