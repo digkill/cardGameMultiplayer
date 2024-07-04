@@ -1,6 +1,6 @@
 import {NB_ROUNDS, useGameEngine} from "../hooks/useGameEngine.jsx";
 import {isHost, isStreamScreen, myPlayer} from "playroomkit";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 const audios = {
     background: new Audio("/audios/Drunken Sailor - Cooper Cannell.mp3"),
