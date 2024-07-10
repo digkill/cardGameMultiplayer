@@ -1,12 +1,12 @@
-import {Center, ContactShadows, Gltf} from "@react-three/drei";
-import {useThree} from "@react-three/fiber";
-import {motion} from "framer-motion-3d";
-import {myPlayer, usePlayersList} from "playroomkit";
-import {degToRad} from "three/src/math/MathUtils";
-import {useGameEngine} from "../hooks/useGameEngine";
-import {Card} from "./Card";
-import {Character} from "./Character";
-import {PlayerName} from "./PlayerName";
+import { Center, ContactShadows, Gltf } from "@react-three/drei"
+import { useThree } from "@react-three/fiber"
+import { motion } from "framer-motion-3d"
+import { myPlayer, usePlayersList } from "playroomkit"
+import { degToRad } from "three/src/math/MathUtils"
+import { useGameEngine } from "../hooks/useGameEngine"
+import { Card } from "./Card"
+import { Character } from "./Character"
+import { PlayerName } from "./PlayerName"
 
 export const MobileController = () => {
     const me = myPlayer();
@@ -23,7 +23,7 @@ export const MobileController = () => {
             <group scale={scalingRatio}>
                 <group position-z={3.5} position-x={-0.6}>
                     <PlayerName
-                        name={me.state.profile.name}
+                        name={me.state.profile?.name}
                         position-y={0.8}
                         fontSize={0.1}
                     />
