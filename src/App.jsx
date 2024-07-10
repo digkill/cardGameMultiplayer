@@ -5,7 +5,7 @@ import { isHost, isStreamScreen } from "playroomkit";
 import { Experience } from "./components/Experience";
 import { UI } from "./components/UI";
 
-const DEBUG = true;
+const DEBUG = false;
 
 function App() {
     return (

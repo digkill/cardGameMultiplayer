@@ -6,7 +6,7 @@ import {GameEngineProvider} from "./hooks/useGameEngine";
 import "./index.css";
 
 insertCoin({
-    streamMode: false,
+    streamMode: true,
 }).then(() => {
     ReactDOM.createRoot(document.getElementById("root")).render(
         <React.StrictMode>
